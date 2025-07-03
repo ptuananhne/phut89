@@ -18,6 +18,12 @@
   "homepage": "https://github.com/ptuananhne/phut89#readme",
   "description": "",
   "dependencies": {
-    "ejs": "^3.1.10"
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.0.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.14.1"
   }
 }
