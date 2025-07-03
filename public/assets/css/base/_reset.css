@@ -1,0 +1,105 @@
+/* ===============================================================
+   RESET & BASE STYLES (_reset.css)
+   =============================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  font-family: "Be Vietnam Pro", sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.6;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body.mobile-nav-open {
+  overflow: hidden;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.main-content {
+  flex-grow: 1;
+  padding: 2rem 0;
+  min-width: 0;
+}
+.page-title {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.page-title h1 {
+  font-size: clamp(1.75rem, 6vw, 2.75rem);
+  font-weight: 800;
+  color: var(--text-darkest);
+  margin: 0;
+  line-height: 1.2;
+}
+.page-title p {
+  font-size: 1rem;
+  color: var(--text-medium);
+  margin-top: 0.5rem;
+  max-width: 60ch;
+  margin-inline: auto;
+}
+.section-title {
+  font-size: clamp(1.25rem, 5vw, 2rem);
+  font-weight: 700;
+  color: var(--text-darkest);
+  margin: 0 0 1rem 0;
+}
+.breadcrumbs {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-medium);
+}
+.breadcrumbs a {
+  color: var(--text-medium);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+.breadcrumbs a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+.breadcrumbs > span {
+  margin: 0 0.5rem;
+  color: var(--text-light);
+}
+.breadcrumbs > .active {
+  color: var(--text-darkest);
+  font-weight: 600;
+  pointer-events: none;
+}
+.grid-full-width {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem 0;
+}
+.fade {
+  animation: fade 0.6s ease-in-out;
+}
+@keyframes fade {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}

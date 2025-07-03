@@ -1,0 +1,97 @@
+/* ===============================================================
+   SLIDER (_slider.css)
+   =============================================================== */
+.single-banner-container,
+.slideshow-container {
+  width: 100%;
+  margin: 1.5rem auto 2.5rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4 / 3;
+  background-color: var(--bg-light);
+}
+.single-banner-container img,
+.mySlides img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.slideshow-container {
+  position: relative;
+}
+.mySlides {
+  display: none;
+  height: 100%;
+}
+.mySlides.active {
+  display: block;
+}
+.slideshow-container .prev,
+.slideshow-container .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.75rem 1rem;
+  color: white;
+  font-size: 1.5rem;
+  transition: var(--transition-fast);
+  border-radius: var(--radius-full);
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  line-height: 1;
+  display: none;
+}
+.slideshow-container .prev {
+  left: 1rem;
+}
+.slideshow-container .next {
+  right: 1rem;
+}
+.slideshow-container .prev:hover,
+.slideshow-container .next:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  transform: translateY(-50%) scale(1.05);
+}
+.dots-container {
+  text-align: center;
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+}
+.dot {
+  cursor: pointer;
+  height: 8px;
+  width: 8px;
+  margin: 0 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  display: inline-block;
+  transition: var(--transition-fast);
+}
+.dot.active-dot,
+.dot:hover {
+  background-color: white;
+  transform: scale(1.2);
+}
+@media (min-width: 768px) {
+  .slideshow-container {
+    aspect-ratio: 16 / 6;
+  }
+  .slideshow-container .prev,
+  .slideshow-container .next {
+    display: block;
+  }
+  .single-banner-container {
+    aspect-ratio: 16/6;
+  }
+}
+@media (min-width: 992px) {
+  .slideshow-container,
+  .single-banner-container {
+    aspect-ratio: 16/5;
+  }
+}

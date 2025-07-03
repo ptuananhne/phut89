@@ -1,0 +1,45 @@
+/* ===============================================================
+   SEARCH PAGE (_search.css)
+   Chứa layout trang kết quả tìm kiếm
+   =============================================================== */
+.search-results-page .page-title {
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.search-results-page .page-title p {
+  font-size: 1rem;
+}
+.search-results-page .results-count {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* --- Khối hiển thị khi không có kết quả --- */
+.no-results {
+  grid-column: 1 / -1; /* Đảm bảo nó chiếm toàn bộ chiều rộng của grid */
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin: 1rem auto;
+  max-width: 600px;
+}
+.no-results i {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.no-results h2 {
+  font-size: 1.75rem;
+  color: var(--text-darkest);
+  margin: 0 0 0.5rem 0;
+}
+.no-results p {
+  color: var(--text-medium);
+  max-width: 50ch;
+  margin-left: auto;
+  margin-right: auto;
+}

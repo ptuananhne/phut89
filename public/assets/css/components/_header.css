@@ -1,0 +1,40 @@
+/* ===============================================================
+   HEADER (_header.css)
+   Chứa layout chính của header và logo
+   =============================================================== */
+.site-header {
+  background-color: var(--bg-white);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--border-color);
+  transition: var(--transition-medium);
+}
+
+.site-header.scrolled {
+  padding: 0.75rem 0;
+  box-shadow: var(--shadow-md);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  text-decoration: none;
+  flex-shrink: 0;
+  order: 0;
+}
+
+@media (min-width: 768px) {
+  .logo {
+    font-size: 1.75rem;
+  }
+}

@@ -1,0 +1,29 @@
+/* ===============================================================
+   BIẾN TOÀN CỤC (_variables.css)
+   =============================================================== */
+:root {
+  --primary-color: #2fdf18;
+  --primary-hover-color: #24b313;
+  --sale-color: #e11d48;
+  --zalo-color: #0068ff;
+  --messenger-color: #0084ff;
+  --call-color: #16a34a;
+  --text-darkest: #111827;
+  --text-dark: #374151;
+  --text-medium: #6b7280;
+  --text-light: #9ca3af;
+  --bg-body: #f9fafb;
+  --bg-white: #ffffff;
+  --bg-light: #f3f4f6;
+  --border-color: #e5e7eb;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

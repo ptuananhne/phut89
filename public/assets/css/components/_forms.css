@@ -1,0 +1,55 @@
+/* ===============================================================
+   FORMS (_forms.css)
+   =============================================================== */
+.search-form {
+  flex-grow: 1;
+  order: 1;
+  position: relative;
+}
+.search-form input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-light);
+  transition: var(--transition-fast);
+  padding-right: 2.5rem;
+}
+.search-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: var(--bg-white);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+.search-form button {
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: var(--text-medium);
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+  transition: var(--transition-fast);
+}
+.search-form button:hover {
+  color: var(--primary-color);
+}
+.sort-filter select {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.9rem;
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+}
+@media (min-width: 768px) {
+  .search-form {
+    display: flex;
+    order: 1;
+  }
+}

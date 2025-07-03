@@ -1,0 +1,18 @@
+# Bật module Rewrite của Apache
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Loại bỏ dấu gạch chéo ở cuối URL
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # --- QUY TẮC CHÍNH (FRONT CONTROLLER) ---
+    # Nếu yêu cầu không phải là một file hoặc thư mục có thật...
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # ...thì chuyển hướng tất cả đến index.php
+    RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+</IfModule>
+
+# Tắt chức năng liệt kê file trong thư mục
+Options -Indexes

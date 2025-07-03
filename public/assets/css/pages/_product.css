@@ -1,0 +1,334 @@
+/* ===============================================================
+   PRODUCT PAGE (_product.css) - REDESIGNED
+   =============================================================== */
+
+/* --- Bố cục chính của trang (trên) --- */
+.product-page-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 992px) {
+  .product-page-layout {
+    grid-template-columns: 2fr 3fr; /* Tỉ lệ 40% - 60% */
+    gap: 3rem;
+    align-items: flex-start;
+  }
+}
+
+/* --- Cột bên trái: Thư viện ảnh --- */
+/* No sticky styles by default for mobile */
+
+.product-gallery .main-image {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: zoom-in;
+  aspect-ratio: 1/1;
+  background-color: var(--bg-white);
+}
+
+.product-gallery .main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+.product-gallery .main-image:hover img {
+  transform: scale(1.05);
+}
+
+.product-gallery .thumbnail-images {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.product-gallery .thumbnail-images img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  opacity: 0.7;
+}
+
+.product-gallery .thumbnail-images img.active,
+.product-gallery .thumbnail-images img:hover {
+  opacity: 1;
+  border-color: var(--primary-color);
+}
+
+/* --- Cột bên phải: Thông tin sản phẩm --- */
+.product-details-container .breadcrumbs {
+  margin-bottom: 0.5rem;
+}
+.product-details-container .product-title {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--text-darkest);
+  margin: 0.5rem 0 1rem 0;
+  line-height: 1.25;
+}
+
+.price-section {
+  background-color: var(--bg-light);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.price-box {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.price-box .sale-price {
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  font-weight: 800;
+  color: var(--sale-color);
+}
+
+.price-box .original-price {
+  font-size: 1.125rem;
+  text-decoration: line-through;
+  color: var(--text-medium);
+}
+
+.discount-wrapper .discount-percentage {
+  background-color: var(--sale-color);
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.stock-info {
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.stock-status.in-stock {
+  color: #16a34a;
+}
+.stock-status.out-of-stock {
+  color: var(--sale-color);
+}
+
+/* --- Tùy chọn biến thể --- */
+.variant-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.option-group .option-label {
+  font-weight: 600;
+  color: var(--text-darkest);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+.option-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.option-choice {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  background-color: var(--bg-white);
+  user-select: none;
+  font-weight: 500;
+}
+.option-choice.selected {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+.option-choice.disabled {
+  opacity: 0.5;
+  background-color: var(--bg-light);
+  cursor: pointer;
+}
+.option-choice-swatch {
+  padding: 0.5rem;
+}
+.option-choice-swatch img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  margin-right: 0.5rem;
+}
+
+/* --- Khối liên hệ & hành động --- */
+.contact-actions {
+  margin-bottom: 1rem;
+}
+.contact-actions .contact-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+.contact-actions .btn-contact {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+/* --- Khu vực thông tin thêm (Dưới) --- */
+.product-extra-info {
+  margin-top: 3rem;
+  grid-column: 1 / -1;
+}
+
+/* Bố cục 2 cột cho phần mô tả và ưu đãi */
+.product-bottom-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Cột phải: Ưu đãi */
+.promo-info-box {
+  border: 2px dashed var(--primary-color);
+  background-color: color-mix(in srgb, var(--primary-color) 5%, transparent);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+.promo-info-box .promo-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-darkest);
+  margin: 0 0 1rem 0;
+}
+.promo-info-box .promo-title i {
+  color: var(--primary-color);
+  margin-right: 0.5rem;
+}
+.promo-info-box .promo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* [FIX] Thay thế Flexbox bằng Grid để xử lý chữ lộn xộn */
+.promo-info-box .promo-list li {
+  margin-bottom: 0.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr; /* Icon tự co giãn, text chiếm phần còn lại */
+  gap: 0.75rem; /* Khoảng cách giữa icon và text */
+  align-items: start;
+}
+.promo-info-box .promo-list li i {
+  color: var(--primary-color);
+  margin-top: 5px; /* Giữ lại để căn chỉnh icon với dòng chữ đầu tiên */
+}
+
+/* Cột trái: Tabs */
+.product-tabs {
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+.tab-headers {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.tab-header {
+  padding: 0.75rem 0.25rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-medium);
+  border-bottom: 3px solid transparent;
+  transition: var(--transition-fast);
+  margin-bottom: -1px;
+}
+.tab-header.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+.tab-content {
+  display: none;
+  padding-top: 1.5rem;
+  line-height: 1.7;
+}
+.tab-content.active {
+  display: block;
+  animation: fade 0.5s;
+}
+.tab-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.tab-content th,
+.tab-content td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+.tab-content th {
+  font-weight: 600;
+  color: var(--text-darkest);
+  width: 40%;
+  background-color: var(--bg-light);
+}
+.tab-content tr:last-child th,
+.tab-content tr:last-child td {
+  border-bottom: none;
+}
+
+/* Sản phẩm liên quan */
+.related-products-section {
+  margin-top: 3rem;
+}
+.related-products-section .product-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* --- [FIX] Chỉ áp dụng bố cục 2 cột và hiệu ứng sticky trên desktop --- */
+@media (min-width: 992px) {
+  .product-bottom-layout {
+    grid-template-columns: 3fr 2fr; /* Mô tả rộng hơn */
+    gap: 3rem;
+    align-items: flex-start;
+  }
+
+  .related-products-section .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Áp dụng sticky cho cột ảnh và cột ưu đãi CHỈ trên desktop */
+  .product-gallery-container,
+  .product-promo-wrapper {
+    position: sticky;
+    top: 90px;
+    height: max-content;
+  }
+}
