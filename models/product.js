@@ -1,3 +1,5 @@
+// ----- FILE: models/product.js -----
+
 const db = require('../util/database');
 
 module.exports = class Product {
@@ -40,6 +42,18 @@ module.exports = class Product {
         return db.execute('SELECT * FROM product_images WHERE product_id = ? ORDER BY id ASC', [productId]);
     }
 
+    // --- BỔ SUNG HÀM CÒN THIẾU ---
+    static fetchAttributes(productId) {
+        const sql = `
+            SELECT a.name as attr_name, pa.value as attr_value
+            FROM product_attributes pa
+            JOIN attributes a ON pa.attribute_id = a.id
+            WHERE pa.product_id = ?
+        `;
+        return db.execute(sql, [productId]);
+    }
+    // --- KẾT THÚC BỔ SUNG ---
+
     static fetchRelated(categoryId, currentProductId) {
         return db.execute(
             'SELECT * FROM products WHERE category_id = ? AND id != ? ORDER BY RAND() LIMIT 4',
@@ -62,7 +76,6 @@ module.exports = class Product {
     }
     
     static filterByCategory({ categoryId, brandId, sort, limit, offset }) {
-        console.log('[MODEL] Bắt đầu filterByCategory với các tham số:', { categoryId, brandId, sort, limit, offset });
         let sql = 'SELECT * FROM products WHERE category_id = ?';
         const params = [categoryId];
 
@@ -86,18 +99,9 @@ module.exports = class Product {
                 break;
         }
         
-        const intLimit = parseInt(limit, 10);
-        const intOffset = parseInt(offset, 10);
-
-        if (isNaN(intLimit) || isNaN(intOffset)) {
-            console.error('[MODEL LỖI] Limit hoặc Offset không hợp lệ!');
-            return Promise.resolve([[]]); 
-        }
-
+        const intLimit = parseInt(limit, 10) || 8;
+        const intOffset = parseInt(offset, 10) || 0;
         sql += ` LIMIT ${intOffset}, ${intLimit}`;
-        
-        console.log('[MODEL] Sẽ thực thi SQL:', sql);
-        console.log('[MODEL] Với các tham số:', params);
         
         return db.execute(sql, params);
     }

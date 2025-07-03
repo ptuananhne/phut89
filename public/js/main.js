@@ -175,5 +175,22 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     })();
+      (function initProductGallery() {
+        const mainImage = document.getElementById('mainProductImage');
+        const thumbnailContainer = document.querySelector('.thumbnail-images');
+        if (!mainImage || !thumbnailContainer) return;
 
+        thumbnailContainer.addEventListener('click', function(e) {
+            const thumbnail = e.target.closest('img');
+            if (!thumbnail) return;
+
+            const fullSrc = thumbnail.dataset.fullSrc || thumbnail.src;
+            mainImage.src = fullSrc;
+            mainImage.alt = thumbnail.alt;
+
+            // Cập nhật class active cho thumbnail
+            thumbnailContainer.querySelectorAll('img').forEach(img => img.classList.remove('active'));
+            thumbnail.classList.add('active');
+        });
+          })();
 });

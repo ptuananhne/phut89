@@ -69,7 +69,7 @@ exports.getProduct = async (req, res, next) => {
             [relatedProducts]
         ] = await Promise.all([
             Product.fetchImages(product.id),
-            Product.fetchAttributes(product.id), // Lấy thông số kỹ thuật
+            Product.fetchAttributes(product.id), // Gọi hàm đã được thêm
             Product.fetchRelated(product.category_id, product.id)
         ]);
         
@@ -83,8 +83,7 @@ exports.getProduct = async (req, res, next) => {
             attributes: attributes, // Truyền attributes cho view
             relatedProducts: relatedProducts
         });
-    } catch (err)
- {
+    } catch (err) {
         console.log(err);
         next(err);
     }
