@@ -1,0 +1,51 @@
+/* style-footer-pages.css - dành cho các trang giới thiệu, hỗ trợ... */
+
+.footer-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: "Be Vietnam Pro", sans-serif;
+  line-height: 1.8;
+  color: var(--text-dark); /* Chuẩn tone chữ */
+  background-color: var(--bg-white); /* nền sáng */
+}
+
+.footer-page h1,
+.footer-page h2 {
+  color: var(--text-darkest);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.footer-page h1 {
+  font-size: 2rem;
+}
+
+.footer-page h2 {
+  font-size: 1.5rem;
+  margin-top: 32px;
+}
+
+.footer-page p {
+  margin-bottom: 12px;
+}
+
+.footer-page ul {
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+.footer-page li {
+  margin-bottom: 8px;
+}
+
+.footer-page strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .footer-page {
+    padding: 0 12px;
+  }
+}

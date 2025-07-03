@@ -1,0 +1,32 @@
+RewriteEngine On
+
+# Bỏ dấu gạch chéo cuối cùng khỏi URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# Chặn truy cập vào các thư mục nhạy cảm
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^logs/ - [F,L]
+
+# Quy tắc viết lại URL cho các trang
+# Ví dụ: /san-pham/iphone-15-pro-max -> sanpham.php?slug=iphone-15-pro-max
+RewriteRule ^san-pham/([a-zA-Z0-9-]+)/?$ sanpham.php?slug=$1 [L,QSA]
+
+# Ví dụ: /danh-muc/dien-thoai -> danhmuc.php?slug=dien-thoai
+RewriteRule ^danh-muc/([a-zA-Z0-9-]+)/?$ danhmuc.php?slug=$1 [L,QSA]
+
+# Bỏ phần mở rộng .php khỏi URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Tùy chọn bảo mật
+<IfModule mod_headers.c>
+    # Chặn clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Ngăn trình duyệt đoán MIME type
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Tắt hiển thị danh sách file trong thư mục
+Options -Indexes
