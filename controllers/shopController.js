@@ -1,11 +1,8 @@
-// ----- FILE: controllers/shopController.js -----
-
 const Product = require('../models/product');
 const Category = require('../models/category');
 
 const PRODUCTS_PER_PAGE = 12;
 
-// Hàm helper để tạo dữ liệu phân trang
 const generatePagination = (currentPage, totalPages, baseUrl = '') => {
     return {
         currentPage: currentPage,
@@ -18,7 +15,6 @@ const generatePagination = (currentPage, totalPages, baseUrl = '') => {
     };
 };
 
-// Controller cho Trang chủ
 exports.getIndex = async (req, res, next) => {
     try {
         const [
@@ -55,7 +51,6 @@ exports.getIndex = async (req, res, next) => {
     }
 };
 
-// Controller cho Trang chi tiết sản phẩm
 exports.getProduct = async (req, res, next) => {
     try {
         const productSlug = req.params.slug;
@@ -66,6 +61,10 @@ exports.getProduct = async (req, res, next) => {
         }
         
         const product = productRows[0];
+        
+        // Tăng lượt xem cho sản phẩm
+        await Product.incrementViewCount(product.id);
+        
         const [images] = await Product.fetchImages(product.id);
         const [relatedProducts] = await Product.fetchRelated(product.category_id, product.id);
 
@@ -76,17 +75,17 @@ exports.getProduct = async (req, res, next) => {
             relatedProducts: relatedProducts
         });
     } catch (err) {
+        console.log(err);
         next(err);
     }
 };
 
-// Controller cho Trang danh mục
 exports.getCategory = async (req, res, next) => {
     try {
         const categorySlug = req.params.slug;
         const page = +req.query.page || 1;
         const brandId = +req.query.brand || null;
-        const sortOption = req.query.sort || 'default';
+        const sortOption = req.query.sort || 'view_desc'; // Đổi mặc định thành xem nhiều
 
         const [categoryRows] = await Category.findBySlug(categorySlug);
         if (categoryRows.length === 0) {
@@ -123,11 +122,11 @@ exports.getCategory = async (req, res, next) => {
             pagination: generatePagination(page, totalPages, paginationUrl)
         });
     } catch (err) {
+        console.log(err);
         next(err);
     }
 };
 
-// Controller cho Trang tìm kiếm
 exports.getSearch = async (req, res, next) => {
     try {
         const query = req.query.q || '';

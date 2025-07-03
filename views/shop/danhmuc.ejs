@@ -29,6 +29,7 @@
             <% } %>
             <label for="sort">Sắp xếp:</label>
             <select name="sort" id="sort" onchange="this.form.submit()">
+                <option value="view_desc" <%= currentSort === 'view_desc' ? 'selected' : '' %>>Xem nhiều nhất</option>
                 <option value="default" <%= currentSort === 'default' ? 'selected' : '' %>>Mới nhất</option>
                 <option value="price_asc" <%= currentSort === 'price_asc' ? 'selected' : '' %>>Giá: Thấp đến cao</option>
                 <option value="price_desc" <%= currentSort === 'price_desc' ? 'selected' : '' %>>Giá: Cao đến thấp</option>
