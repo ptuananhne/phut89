@@ -3,12 +3,13 @@
 const db = require('../util/database');
 
 module.exports = class Product {
-    // Lấy tất cả sản phẩm (hỗ trợ phân trang)
     static fetchAll(limit, offset) {
-        return db.execute('SELECT * FROM products ORDER BY created_at DESC LIMIT ? OFFSET ?', [limit, offset]);
+        // SỬA LỖI: Chuyển limit/offset thành số nguyên và đưa trực tiếp vào câu lệnh
+        const intLimit = parseInt(limit, 10) || 12;
+        const intOffset = parseInt(offset, 10) || 0;
+        return db.execute(`SELECT * FROM products ORDER BY created_at DESC LIMIT ${intOffset}, ${intLimit}`);
     }
 
-    // Đếm tổng số sản phẩm
     static countAll() {
         return db.execute('SELECT COUNT(id) as total FROM products');
     }
@@ -25,7 +26,7 @@ module.exports = class Product {
     }
 
     static fetchImages(productId) {
-        return db.execute('SELECT * FROM product_images WHERE product_id = ? ORDER BY is_default DESC, id ASC', [productId]);
+        return db.execute('SELECT * FROM product_images WHERE product_id = ? ORDER BY id ASC', [productId]);
     }
 
     static fetchAttributes(productId) {
@@ -38,7 +39,6 @@ module.exports = class Product {
         return db.execute(sql, [productId]);
     }
 
-    // Lấy sản phẩm liên quan
     static fetchRelated(categoryId, currentProductId) {
         return db.execute(
             'SELECT * FROM products WHERE category_id = ? AND id != ? ORDER BY RAND() LIMIT 4',
@@ -46,11 +46,12 @@ module.exports = class Product {
         );
     }
     
-    // Tìm kiếm sản phẩm
     static search(query, limit, offset) {
         const searchTerm = `%${query}%`;
-        const sql = 'SELECT * FROM products WHERE name LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?';
-        return db.execute(sql, [searchTerm, limit, offset]);
+        const intLimit = parseInt(limit, 10) || 12;
+        const intOffset = parseInt(offset, 10) || 0;
+        const sql = `SELECT * FROM products WHERE name LIKE ? ORDER BY created_at DESC LIMIT ${intOffset}, ${intLimit}`;
+        return db.execute(sql, [searchTerm]);
     }
     
     static countSearch(query) {
@@ -59,7 +60,6 @@ module.exports = class Product {
         return db.execute(sql, [searchTerm]);
     }
 
-    // Lọc sản phẩm trong một danh mục
     static filterByCategory({ categoryId, brandId, sort, limit, offset }) {
         let sql = 'SELECT * FROM products WHERE category_id = ?';
         const params = [categoryId];
@@ -76,13 +76,13 @@ module.exports = class Product {
             case 'price_desc':
                 sql += ' ORDER BY price DESC';
                 break;
-            default: // Mới nhất
+            default:
                 sql += ' ORDER BY created_at DESC';
         }
         
-        sql += ' LIMIT ? OFFSET ?';
-        params.push(limit, offset);
-
+        const intLimit = parseInt(limit, 10) || 12;
+        const intOffset = parseInt(offset, 10) || 0;
+        sql += ` LIMIT ${intOffset}, ${intLimit}`;
         return db.execute(sql, params);
     }
     
@@ -96,4 +96,3 @@ module.exports = class Product {
         return db.execute(sql, params);
     }
 };
-

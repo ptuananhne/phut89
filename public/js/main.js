@@ -1,19 +1,58 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // 1. Slideshow Banner
+    /**
+     * Khởi tạo Menu cho di động (Hamburger)
+     */
+    (function initMobileMenu() {
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+        const closeBtn = document.getElementById('mobile-nav-close');
+        if (!hamburgerBtn || !mobileNav || !closeBtn) return;
+
+        const overlay = document.getElementById('mobile-nav-overlay');
+        if (!overlay) return;
+
+        const openMenu = () => {
+            mobileNav.classList.add('open');
+            overlay.classList.add('open');
+            document.body.classList.add('mobile-nav-open');
+        };
+
+        const closeMenu = () => {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.classList.remove('mobile-nav-open');
+        };
+
+        hamburgerBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+                closeMenu();
+            }
+        });
+    })();
+
+
+    /**
+     * Khởi tạo Slideshow Banner
+     */
     (function initSlideshow() {
         const container = document.querySelector('.slideshow-container');
         if (!container) return;
 
-        const slides = container.querySelectorAll(".mySlides");
-        const dots = container.querySelectorAll(".dot");
+        const slides = Array.from(container.querySelectorAll(".mySlides"));
+        const dots = Array.from(container.querySelectorAll(".dot"));
         const prevBtn = container.querySelector('.prev');
         const nextBtn = container.querySelector('.next');
 
         if (slides.length <= 1) {
             if(prevBtn) prevBtn.style.display = 'none';
             if(nextBtn) nextBtn.style.display = 'none';
-            if(dots.length > 0) container.querySelector('.dots-container').style.display = 'none';
+            const dotsContainer = container.querySelector('.dots-container');
+            if(dotsContainer) dotsContainer.style.display = 'none';
             return;
         };
 
@@ -23,11 +62,15 @@ document.addEventListener('DOMContentLoaded', function () {
         function showSlides(n) {
             slideIndex = (n + slides.length) % slides.length;
 
-            slides.forEach(slide => slide.classList.remove("active"));
+            slides.forEach(slide => slide.style.display = "none");
             dots.forEach(dot => dot.classList.remove("active-dot"));
             
-            slides[slideIndex].classList.add("active");
-            dots[slideIndex].classList.add("active-dot");
+            if (slides[slideIndex]) {
+                 slides[slideIndex].style.display = "block";
+            }
+            if (dots[slideIndex]) {
+                dots[slideIndex].classList.add("active-dot");
+            }
         }
 
         function playSlideshow() {
@@ -55,11 +98,15 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        showSlides(slideIndex);
-        playSlideshow();
+        if (slides.length > 0) {
+            showSlides(slideIndex);
+            playSlideshow();
+        }
     })();
 
-    // 2. Product Carousel Navigation
+    /**
+     * Khởi tạo Carousel cho sản phẩm
+     */
     (function initProductCarousels() {
         const carouselContainers = document.querySelectorAll('.product-carousel-container');
 
@@ -81,29 +128,52 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     })();
-       (function initMobileMenu() {
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const mobileNav = document.getElementById('mobile-nav');
-        const closeBtn = document.getElementById('mobile-nav-close');
-        if (!hamburgerBtn || !mobileNav || !closeBtn) return;
 
-        const overlay = document.getElementById('mobile-nav-overlay');
-        if (!overlay) return;
-
-        const openMenu = () => {
-            mobileNav.classList.add('open');
-            overlay.classList.add('open');
-            document.body.classList.add('mobile-nav-open');
-        };
-
-        const closeMenu = () => {
-            mobileNav.classList.remove('open');
-            overlay.classList.remove('open');
-            document.body.classList.remove('mobile-nav-open');
-        };
-
-        hamburgerBtn.addEventListener('click', openMenu);
-        closeBtn.addEventListener('click', closeMenu);
-        overlay.addEventListener('click', closeMenu);
+    /**
+     * Khởi tạo Tab cho bản đồ
+     */
+    (function initMapTabs() {
+        const tabsContainer = document.querySelector('.map-tabs');
+        if (!tabsContainer) return;
+        tabsContainer.addEventListener('click', function (e) {
+            if (e.target.classList.contains('map-tab-btn')) {
+                const mapId = e.target.dataset.map;
+                if (!mapId) return;
+                document.querySelectorAll('.map-tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.map-pane').forEach(pane => pane.classList.remove('active'));
+                e.target.classList.add('active');
+                const activePane = document.getElementById(mapId);
+                if (activePane) {
+                    activePane.classList.add('active');
+                }
+            }
+        });
     })();
+    
+    /**
+     * Khởi tạo Tab cho mô tả sản phẩm
+     */
+    (function initProductTabs() {
+        const tabsContainer = document.querySelector('.product-tabs');
+        if (!tabsContainer) return;
+
+        const headers = tabsContainer.querySelectorAll('.tab-header');
+        const contents = tabsContainer.querySelectorAll('.tab-content');
+
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const tabId = header.dataset.tab;
+
+                headers.forEach(h => h.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                header.classList.add('active');
+                const activeContent = tabsContainer.querySelector(`#${tabId}`);
+                if (activeContent) {
+                    activeContent.classList.add('active');
+                }
+            });
+        });
+    })();
+
 });

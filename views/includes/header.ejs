@@ -3,14 +3,14 @@
         <a href="/" class="logo">Phut89</a>
 
         <form action="/timkiem" method="GET" class="search-form">
-            <input type="search" name="q" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+            <input type="search" name="q" placeholder="Tìm kiếm sản phẩm..." value="<%= locals.searchQuery || '' %>" autocomplete="off">
             <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
         </form>
 
         <nav class="main-nav">
             <ul>
                 <li><a href="/" class="<%= path === '/' ? 'active' : '' %>">Trang Chủ</a></li>
-                <!-- Các link khác có thể thêm vào sau -->
+                <!-- Các link khác như 'Cầm đồ', 'Sửa chữa' có thể thêm vào đây sau -->
             </ul>
         </nav>
 

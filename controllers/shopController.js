@@ -6,7 +6,7 @@ const Category = require('../models/category');
 const PRODUCTS_PER_PAGE = 12;
 
 // Hàm helper để tạo dữ liệu phân trang
-const generatePagination = (currentPage, totalPages) => {
+const generatePagination = (currentPage, totalPages, baseUrl = '') => {
     return {
         currentPage: currentPage,
         hasNextPage: currentPage < totalPages,
@@ -14,26 +14,24 @@ const generatePagination = (currentPage, totalPages) => {
         nextPage: currentPage + 1,
         previousPage: currentPage - 1,
         lastPage: totalPages,
+        baseUrl: baseUrl
     };
 };
 
 exports.getIndex = async (req, res, next) => {
     try {
+        const page = +req.query.page || 1;
+        const offset = (page - 1) * PRODUCTS_PER_PAGE;
+        
         const [[{ total }]] = await Product.countAll();
         const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
 
-        const [products] = await Product.fetchAll(PRODUCTS_PER_PAGE, 0);
-
-        const banners = [
-            { title: 'Banner 1', link: '#', imageUrl: 'https://placehold.co/1200x400/2fdf18/ffffff?text=Banner+1' },
-            { title: 'Banner 2', link: '#', imageUrl: 'https://placehold.co/1200x400/333333/ffffff?text=Banner+2' }
-        ];
+        const [products] = await Product.fetchAll(PRODUCTS_PER_PAGE, offset);
 
         res.render('shop/index', {
             pageTitle: 'Trang Chủ',
-            banners: banners,
             products: products,
-            pagination: generatePagination(1, totalPages)
+            pagination: generatePagination(page, totalPages, '/')
         });
     } catch (err) {
         next(err);
@@ -50,8 +48,9 @@ exports.getProduct = async (req, res, next) => {
         }
         
         const product = productRows[0];
-        const [images] = await Product.fetchImages(product.id);
-        const [attributes] = await Product.fetchAttributes(product.id);
+        // Giả sử chưa có các bảng này, ta truyền mảng rỗng
+        const images = []; // const [images] = await Product.fetchImages(product.id);
+        const attributes = []; // const [attributes] = await Product.fetchAttributes(product.id);
         const [relatedProducts] = await Product.fetchRelated(product.category_id, product.id);
 
         res.render('shop/sanpham', {
@@ -76,7 +75,9 @@ exports.getCategory = async (req, res, next) => {
             return res.status(404).render('404', { pageTitle: 'Danh mục không tồn tại' });
         }
         const category = categoryRows[0];
-        const [brands] = await Category.fetchBrandsForCategory(category.id);
+        
+        // Giả sử chưa có bảng brands, truyền mảng rỗng
+        const brands = []; // const [brands] = await Category.fetchBrandsForCategory(category.id);
         
         const [[{ total }]] = await Product.countFilterByCategory({ categoryId: category.id });
         const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
@@ -85,7 +86,8 @@ exports.getCategory = async (req, res, next) => {
         const [products] = await Product.filterByCategory({
             categoryId: category.id,
             limit: PRODUCTS_PER_PAGE,
-            offset: offset
+            offset: offset,
+            sort: req.query.sort || 'default'
         });
         
         res.render('shop/danhmuc', {
@@ -93,7 +95,7 @@ exports.getCategory = async (req, res, next) => {
             category: category,
             products: products,
             brands: brands,
-            pagination: generatePagination(page, totalPages)
+            pagination: generatePagination(page, totalPages, `/danh-muc/${category.slug}`)
         });
     } catch (err) {
         next(err);
@@ -122,7 +124,7 @@ exports.getSearch = async (req, res, next) => {
             searchQuery: query,
             products: products,
             totalProducts: totalProducts,
-            pagination: generatePagination(page, totalPages)
+            pagination: generatePagination(page, totalPages, `/timkiem?q=${query}`)
         });
     } catch (err) {
         next(err);
