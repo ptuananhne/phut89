@@ -16,5 +16,8 @@
     "url": "https://github.com/ptuananhne/phut89/issues"
   },
   "homepage": "https://github.com/ptuananhne/phut89#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.10"
+  }
 }
