@@ -1,7 +1,7 @@
 const Product = require('../models/product');
 const Category = require('../models/category');
 
-const PRODUCTS_PER_PAGE = 12;
+const PRODUCTS_PER_PAGE = 8;
 
 const generatePagination = (currentPage, totalPages, baseUrl = '') => {
     return {
@@ -62,19 +62,29 @@ exports.getProduct = async (req, res, next) => {
         
         const product = productRows[0];
         
+        // Lấy đồng thời các dữ liệu liên quan
+        const [
+            [images],
+            [attributes],
+            [relatedProducts]
+        ] = await Promise.all([
+            Product.fetchImages(product.id),
+            Product.fetchAttributes(product.id), // Lấy thông số kỹ thuật
+            Product.fetchRelated(product.category_id, product.id)
+        ]);
+        
         // Tăng lượt xem cho sản phẩm
         await Product.incrementViewCount(product.id);
-        
-        const [images] = await Product.fetchImages(product.id);
-        const [relatedProducts] = await Product.fetchRelated(product.category_id, product.id);
 
         res.render('shop/sanpham', {
             pageTitle: product.name,
             product: product,
             images: images,
+            attributes: attributes, // Truyền attributes cho view
             relatedProducts: relatedProducts
         });
-    } catch (err) {
+    } catch (err)
+ {
         console.log(err);
         next(err);
     }
@@ -82,10 +92,13 @@ exports.getProduct = async (req, res, next) => {
 
 exports.getCategory = async (req, res, next) => {
     try {
+        console.log('--- [CONTROLLER] Bắt đầu getCategory ---');
         const categorySlug = req.params.slug;
         const page = +req.query.page || 1;
         const brandId = +req.query.brand || null;
-        const sortOption = req.query.sort || 'view_desc'; // Đổi mặc định thành xem nhiều
+        const sortOption = req.query.sort || 'view_desc';
+
+        console.log('[CONTROLLER] Các bộ lọc đầu vào:', { page, brandId, sortOption });
 
         const [categoryRows] = await Category.findBySlug(categorySlug);
         if (categoryRows.length === 0) {
@@ -99,6 +112,8 @@ exports.getCategory = async (req, res, next) => {
         const [[{ total }]] = await Product.countFilterByCategory(filterOptions);
         const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
         const offset = (page - 1) * PRODUCTS_PER_PAGE;
+
+        console.log('[CONTROLLER] Tính toán phân trang:', { totalProducts: total, totalPages, offset });
         
         const [products] = await Product.filterByCategory({
             ...filterOptions,
@@ -106,6 +121,8 @@ exports.getCategory = async (req, res, next) => {
             limit: PRODUCTS_PER_PAGE,
             offset: offset,
         });
+        
+        console.log(`[CONTROLLER] Đã lấy được ${products.length} sản phẩm từ database.`);
         
         let paginationUrl = `/danh-muc/${category.slug}?sort=${sortOption}`;
         if (brandId) {
@@ -122,10 +139,11 @@ exports.getCategory = async (req, res, next) => {
             pagination: generatePagination(page, totalPages, paginationUrl)
         });
     } catch (err) {
-        console.log(err);
+        console.log('[CONTROLLER LỖI]', err);
         next(err);
     }
 };
+
 
 exports.getSearch = async (req, res, next) => {
     try {

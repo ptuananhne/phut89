@@ -1,16 +1,15 @@
 <%- include('../includes/head.ejs') %>
 
-<!-- Banner Section -->
 <% if (locals.banners && banners.length > 0) { %>
     <div class="slideshow-container">
         <% banners.forEach((banner, index) => { %>
-            <div class="mySlides fade" style="<%= index === 0 ? 'display:block' : 'display:none' %>">
+            <div class="mySlides fade <%= index === 0 ? 'active' : '' %>">
                 <a href="<%= banner.link %>"><img src="<%= banner.imageUrl %>" alt="<%= banner.title %>"></a>
             </div>
         <% }) %>
         <% if (banners.length > 1) { %>
-            <a class="prev">&#10094;</a>
-            <a class="next">&#10095;</a>
+            <a class="prev">❮</a>
+            <a class="next">❯</a>
             <div class="dots-container">
                 <% banners.forEach((banner, index) => { %>
                     <span class="dot <%= index === 0 ? 'active-dot' : '' %>"></span>
@@ -24,7 +23,6 @@
     <h1>Chào mừng đến với Phut89</h1>
 </div>
 
-<!-- Featured Products Section -->
 <% if (featuredProducts && featuredProducts.length > 0) { %>
     <section class="category-showcase">
         <div class="category-showcase-header">
@@ -38,13 +36,12 @@
                     <% }) %>
                 </div>
             </div>
-            <button class="carousel-nav-btn prev" aria-label="Previous Product">&#10094;</button>
-            <button class="carousel-nav-btn next" aria-label="Next Product">&#10095;</button>
+            <button class="carousel-nav-btn prev" aria-label="Previous Product">❮</button>
+            <button class="carousel-nav-btn next" aria-label="Next Product">❯</button>
         </div>
     </section>
 <% } %>
 
-<!-- Loop through categories -->
 <% if (categories && categories.length > 0) { %>
     <% categories.forEach(category => { %>
         <% if (category.products && category.products.length > 0) { %>
@@ -61,15 +58,14 @@
                             <% }) %>
                         </div>
                     </div>
-                    <button class="carousel-nav-btn prev" aria-label="Previous Product">&#10094;</button>
-                    <button class="carousel-nav-btn next" aria-label="Next Product">&#10095;</button>
+                    <button class="carousel-nav-btn prev" aria-label="Previous Product">❮</button>
+                    <button class="carousel-nav-btn next" aria-label="Next Product">❯</button>
                 </div>
             </section>
         <% } %>
     <% }) %>
 <% } %>
 
-<!-- Map Section -->
 <section class="map-section">
     <h2 class="section-title" style="text-align: center;">Hệ thống Cửa hàng Phut89</h2>
     <div class="map-tabs">
