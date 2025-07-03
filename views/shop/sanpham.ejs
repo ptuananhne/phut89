@@ -1,0 +1,62 @@
+<%- include('../includes/head.ejs') %>
+
+<div class="breadcrumbs">
+    <a href="/">Trang chủ</a><span>&gt;</span>
+    <a href="/danh-muc/<%= product.category_slug %>"><%= product.category_name %></a><span>&gt;</span>
+    <span class="active"><%= product.name %></span>
+</div>
+
+<div class="product-detail-layout">
+    <div class="product-gallery">
+        <div class="main-image">
+            <img id="mainProductImage" src="<%= images.length > 0 ? images[0].image_url : '/images/placeholder.png' %>" alt="<%= product.name %>">
+        </div>
+        <div class="thumbnail-images">
+            <% images.forEach(image => { %>
+                <img src="<%= image.image_url %>" alt="Thumbnail">
+            <% }) %>
+        </div>
+    </div>
+    <div class="product-info">
+        <h1 class="product-title"><%= product.name %></h1>
+        <div class="price-box"><span class="sale-price"><%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price) %></span></div>
+        <p><strong>Tình trạng:</strong> <span class="stock-status in-stock">Còn hàng</span></p>
+    </div>
+</div>
+
+<div class="product-tabs">
+    <div class="tab-headers">
+        <button class="tab-header active" data-tab="description">Mô Tả Sản Phẩm</button>
+        <button class="tab-header" data-tab="specs">Thông Số Kỹ Thuật</button>
+    </div>
+    <div class="tab-content active" id="description"><%- product.description %></div>
+    <div class="tab-content" id="specs">
+        <% if(attributes.length > 0) { %>
+        <table>
+            <tbody>
+                <% attributes.forEach(attr => { %>
+                <tr>
+                    <th><%= attr.attr_name %></th>
+                    <td><%= attr.attr_value %></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <% } else { %><p>Chưa có thông số.</p><% } %>
+    </div>
+</div>
+
+<% if(relatedProducts.length > 0) { %>
+<section class="category-showcase">
+    <h2 class="section-title">Sản phẩm liên quan</h2>
+    <div class="product-grid">
+        <% relatedProducts.forEach(prod => { %>
+            <%- include('../includes/product-card.ejs', {product: prod}) %>
+        <% }) %>
+    </div>
+section>
+<% } %>
+
+
+<%- include('../includes/footer.ejs') %>
+<%- include('../includes/end.ejs') %>

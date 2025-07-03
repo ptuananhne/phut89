@@ -1,0 +1,24 @@
+<%- include('../includes/head.ejs') %>
+
+<div class="page-title">
+    <h1>Kết quả tìm kiếm cho "<%= searchQuery %>"</h1>
+    <p>Tìm thấy <%= totalProducts %> sản phẩm.</p>
+</div>
+
+<section class="product-grid">
+    <% if (products.length > 0) { %>
+        <% products.forEach(product => { %>
+            <%- include('../includes/product-card.ejs', { product: product }) %>
+        <% }) %>
+    <% } else { %>
+        <p>Không tìm thấy sản phẩm nào.</p>
+    <% } %>
+</section>
+
+<% if (pagination && pagination.lastPage > 1) { %>
+    <div class="pagination">
+        </div>
+<% } %>
+
+<%- include('../includes/footer.ejs') %>
+<%- include('../includes/end.ejs') %>

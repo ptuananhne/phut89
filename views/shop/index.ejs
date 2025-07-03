@@ -1,0 +1,46 @@
+<%- include('../includes/head.ejs') %>
+
+<% if (locals.banners && banners.length > 0) { %>
+    <div class="slideshow-container">
+        <% banners.forEach((banner, index) => { %>
+            <div class="mySlides fade <%= index === 0 ? 'active' : '' %>">
+                <a href="<%= banner.link %>"><img src="<%= banner.imageUrl %>" alt="<%= banner.title %>"></a>
+            </div>
+        <% }) %>
+        <% if (banners.length > 1) { %>
+            <a class="prev">&#10094;</a><a class="next">&#10095;</a>
+            <div class="dots-container">
+                <% banners.forEach((banner, index) => { %><span class="dot <%= index === 0 ? 'active-dot' : '' %>"></span><% }) %>
+            </div>
+        <% } %>
+    </div>
+<% } %>
+
+<div class="page-title"><h1>Sản Phẩm</h1></div>
+
+<section class="product-grid">
+    <% if (products.length > 0) { %>
+        <% products.forEach(product => { %>
+            <%- include('../includes/product-card.ejs', { product: product }) %>
+        <% }) %>
+    <% } else { %>
+        <p>Không có sản phẩm nào.</p>
+    <% } %>
+</section>
+
+<% if (pagination && pagination.lastPage > 1) { %>
+    <div class="pagination">
+        <% if (pagination.hasPreviousPage) { %>
+            <a href="/?page=<%= pagination.previousPage %>">‹</a>
+        <% } %>
+        <% for(let i = 1; i <= pagination.lastPage; i++) { %>
+            <a href="/?page=<%= i %>" class="<%= i === pagination.currentPage ? 'active' : '' %>"><%= i %></a>
+        <% } %>
+        <% if (pagination.hasNextPage) { %>
+            <a href="/?page=<%= pagination.nextPage %>">›</a>
+        <% } %>
+    </div>
+<% } %>
+
+<%- include('../includes/footer.ejs') %>
+<%- include('../includes/end.ejs') %>

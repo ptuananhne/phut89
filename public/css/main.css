@@ -1,0 +1,47 @@
+/* Import variables and base styles */
+@import url("./variables.css");
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap");
+
+/* Import layout styles */
+@import url("./layout/_header.css");
+@import url("./layout/_footer.css");
+@import url("./layout/_sidebar.css");
+
+/* Import component styles */
+@import url("./components/_buttons.css");
+@import url("./components/_product-card.css");
+@import url("./components/_mobile-nav.css");
+
+
+/* --- Base & Reset --- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: "Be Vietnam Pro", sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.6;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+body.mobile-nav-open { overflow: hidden; }
+.container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+
+/* --- Main Layout --- */
+.page-wrapper { display: flex; flex-direction: column; gap: 1.5rem; flex-grow: 1; margin-top: 2rem; }
+.main-content { flex-grow: 1; min-width: 0; }
+
+/* --- General Styles --- */
+.product-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+.page-title { margin-bottom: 2rem; text-align: center; }
+.page-title h1 { font-size: clamp(1.75rem, 6vw, 2.75rem); font-weight: 800; }
+
+/* --- Responsive Desktop --- */
+@media (min-width: 992px) {
+    .page-wrapper { flex-direction: row; align-items: flex-start; }
+    .main-content { padding: 0; }
+    .product-grid { grid-template-columns: repeat(4, 1fr); }
+}
