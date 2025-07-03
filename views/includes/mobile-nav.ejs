@@ -1,0 +1,28 @@
+<nav class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-header">
+        <h3 class="mobile-nav-title">Menu</h3>
+        <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Đóng menu">&times;</button>
+    </div>
+    <div class="mobile-nav-body">
+        <ul>
+            <li><a href="/" class="<%= path === '/' ? 'active' : '' %>"><i class="fas fa-home fa-fw"></i><span>Trang Chủ</span></a></li>
+            
+            <li class="nav-heading">Dịch Vụ & Thông Tin</li>
+            <li><a href="#"><i class="fas fa-hand-holding-usd fa-fw"></i><span>Cầm Đồ</span></a></li>
+            <li><a href="#"><i class="fas fa-tools fa-fw"></i><span>Sửa Chữa</span></a></li>
+            <li><a href="#"><i class="fas fa-info-circle fa-fw"></i><span>Giới Thiệu</span></a></li>
+
+            <li class="nav-heading">Danh Mục Sản Phẩm</li>
+            <% if (allCategories && allCategories.length > 0) { %>
+                <% allCategories.forEach(cat => { %>
+                    <li>
+                        <a href="/danh-muc/<%= cat.slug %>" class="<%= (locals.category && locals.category.id === cat.id) ? 'active' : '' %>">
+                            <i class="fas fa-tag fa-fw"></i><span><%= cat.name %></span>
+                        </a>
+                    </li>
+                <% }) %>
+            <% } %>
+        </ul>
+    </div>
+</nav>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
