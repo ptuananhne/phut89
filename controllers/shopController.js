@@ -18,26 +18,44 @@ const generatePagination = (currentPage, totalPages, baseUrl = '') => {
     };
 };
 
+// Controller cho Trang chủ
 exports.getIndex = async (req, res, next) => {
     try {
-        const page = +req.query.page || 1;
-        const offset = (page - 1) * PRODUCTS_PER_PAGE;
-        
-        const [[{ total }]] = await Product.countAll();
-        const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
+        const [
+            [featuredProducts],
+            [allCategories]
+        ] = await Promise.all([
+            Product.fetchFeatured(12),
+            Category.fetchAll()
+        ]);
 
-        const [products] = await Product.fetchAll(PRODUCTS_PER_PAGE, offset);
+        const categoriesForHomepage = await Promise.all(allCategories.map(async (category) => {
+            const [products] = await Product.fetchByCategoryId(category.id, 7);
+            return {
+                ...category,
+                products: products
+            };
+        }));
+        
+        const banners = [
+            { title: 'Banner 1', link: '#', imageUrl: 'https://placehold.co/1200x400/2fdf18/ffffff?text=Banner+1' },
+            { title: 'Banner 2', link: '#', imageUrl: 'https://placehold.co/1200x400/333333/ffffff?text=Banner+2' }
+        ];
 
         res.render('shop/index', {
             pageTitle: 'Trang Chủ',
-            products: products,
-            pagination: generatePagination(page, totalPages, '/')
+            banners: banners,
+            featuredProducts: featuredProducts,
+            categories: categoriesForHomepage,
         });
+
     } catch (err) {
+        console.log(err);
         next(err);
     }
 };
 
+// Controller cho Trang chi tiết sản phẩm
 exports.getProduct = async (req, res, next) => {
     try {
         const productSlug = req.params.slug;
@@ -48,16 +66,13 @@ exports.getProduct = async (req, res, next) => {
         }
         
         const product = productRows[0];
-        // Giả sử chưa có các bảng này, ta truyền mảng rỗng
-        const images = []; // const [images] = await Product.fetchImages(product.id);
-        const attributes = []; // const [attributes] = await Product.fetchAttributes(product.id);
+        const [images] = await Product.fetchImages(product.id);
         const [relatedProducts] = await Product.fetchRelated(product.category_id, product.id);
 
         res.render('shop/sanpham', {
             pageTitle: product.name,
             product: product,
             images: images,
-            attributes: attributes,
             relatedProducts: relatedProducts
         });
     } catch (err) {
@@ -65,43 +80,54 @@ exports.getProduct = async (req, res, next) => {
     }
 };
 
+// Controller cho Trang danh mục
 exports.getCategory = async (req, res, next) => {
     try {
         const categorySlug = req.params.slug;
         const page = +req.query.page || 1;
-        
+        const brandId = +req.query.brand || null;
+        const sortOption = req.query.sort || 'default';
+
         const [categoryRows] = await Category.findBySlug(categorySlug);
         if (categoryRows.length === 0) {
             return res.status(404).render('404', { pageTitle: 'Danh mục không tồn tại' });
         }
         const category = categoryRows[0];
         
-        // Giả sử chưa có bảng brands, truyền mảng rỗng
-        const brands = []; // const [brands] = await Category.fetchBrandsForCategory(category.id);
+        const [brands] = await Category.fetchBrandsForCategory(category.id);
         
-        const [[{ total }]] = await Product.countFilterByCategory({ categoryId: category.id });
+        const filterOptions = { categoryId: category.id, brandId: brandId };
+        const [[{ total }]] = await Product.countFilterByCategory(filterOptions);
         const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
         const offset = (page - 1) * PRODUCTS_PER_PAGE;
         
         const [products] = await Product.filterByCategory({
-            categoryId: category.id,
+            ...filterOptions,
+            sort: sortOption,
             limit: PRODUCTS_PER_PAGE,
             offset: offset,
-            sort: req.query.sort || 'default'
         });
+        
+        let paginationUrl = `/danh-muc/${category.slug}?sort=${sortOption}`;
+        if (brandId) {
+            paginationUrl += `&brand=${brandId}`;
+        }
         
         res.render('shop/danhmuc', {
             pageTitle: `Danh mục: ${category.name}`,
             category: category,
             products: products,
             brands: brands,
-            pagination: generatePagination(page, totalPages, `/danh-muc/${category.slug}`)
+            currentBrandId: brandId,
+            currentSort: sortOption,
+            pagination: generatePagination(page, totalPages, paginationUrl)
         });
     } catch (err) {
         next(err);
     }
 };
 
+// Controller cho Trang tìm kiếm
 exports.getSearch = async (req, res, next) => {
     try {
         const query = req.query.q || '';
@@ -118,13 +144,14 @@ exports.getSearch = async (req, res, next) => {
         }
 
         const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
+        const paginationUrl = `/timkiem?q=${query}`;
 
         res.render('shop/timkiem', {
             pageTitle: `Tìm kiếm cho: ${query}`,
             searchQuery: query,
             products: products,
             totalProducts: totalProducts,
-            pagination: generatePagination(page, totalPages, `/timkiem?q=${query}`)
+            pagination: generatePagination(page, totalPages, paginationUrl)
         });
     } catch (err) {
         next(err);

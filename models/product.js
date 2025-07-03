@@ -4,7 +4,6 @@ const db = require('../util/database');
 
 module.exports = class Product {
     static fetchAll(limit, offset) {
-        // SỬA LỖI: Chuyển limit/offset thành số nguyên và đưa trực tiếp vào câu lệnh
         const intLimit = parseInt(limit, 10) || 12;
         const intOffset = parseInt(offset, 10) || 0;
         return db.execute(`SELECT * FROM products ORDER BY created_at DESC LIMIT ${intOffset}, ${intLimit}`);
@@ -24,19 +23,20 @@ module.exports = class Product {
         `;
         return db.execute(sql, [slug]);
     }
-
-    static fetchImages(productId) {
-        return db.execute('SELECT * FROM product_images WHERE product_id = ? ORDER BY id ASC', [productId]);
+    
+    static fetchFeatured(limit) {
+        const intLimit = parseInt(limit, 10) || 12;
+        return db.execute(`SELECT * FROM products ORDER BY created_at DESC LIMIT ${intLimit}`);
     }
 
-    static fetchAttributes(productId) {
-        const sql = `
-            SELECT a.name as attr_name, pa.value as attr_value
-            FROM product_attributes pa
-            JOIN attributes a ON pa.attribute_id = a.id
-            WHERE pa.product_id = ?
-        `;
-        return db.execute(sql, [productId]);
+    static fetchByCategoryId(categoryId, limit) {
+        const intLimit = parseInt(limit, 10) || 7;
+        return db.execute('SELECT * FROM products WHERE category_id = ? ORDER BY created_at DESC LIMIT ?', [categoryId, intLimit]);
+    }
+
+    static fetchImages(productId) {
+        // Giả sử bạn có bảng product_images
+        return db.execute('SELECT * FROM product_images WHERE product_id = ? ORDER BY id ASC', [productId]);
     }
 
     static fetchRelated(categoryId, currentProductId) {
@@ -59,7 +59,7 @@ module.exports = class Product {
         const sql = 'SELECT COUNT(id) as total FROM products WHERE name LIKE ?';
         return db.execute(sql, [searchTerm]);
     }
-
+    
     static filterByCategory({ categoryId, brandId, sort, limit, offset }) {
         let sql = 'SELECT * FROM products WHERE category_id = ?';
         const params = [categoryId];

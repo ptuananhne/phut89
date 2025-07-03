@@ -5,13 +5,35 @@
     <span class="active"><%= category.name %></span>
 </div>
 
+<div class="page-title">
+    <h1><%= category.name %></h1>
+</div>
+
 <div class="filter-bar">
+    <% if (brands && brands.length > 0) { %>
     <div class="brand-filter">
         <span class="filter-label">Thương hiệu:</span>
-        <a href="/danh-muc/<%= category.slug %>" class="filter-btn active">Tất cả</a>
+        <a href="/danh-muc/<%= category.slug %>?sort=<%= currentSort %>" class="filter-btn <%= !currentBrandId ? 'active' : '' %>">Tất cả</a>
         <% brands.forEach(brand => { %>
-            <a href="/danh-muc/<%= category.slug %>?brand=<%= brand.slug %>" class="filter-btn"><%= brand.name %></a>
+            <a href="/danh-muc/<%= category.slug %>?brand=<%= brand.id %>&sort=<%= currentSort %>" class="filter-btn <%= currentBrandId === brand.id ? 'active' : '' %>">
+                <%= brand.name %>
+            </a>
         <% }) %>
+    </div>
+    <% } %>
+
+    <div class="sort-filter">
+        <form method="GET" action="/danh-muc/<%= category.slug %>" id="sortForm">
+            <% if (currentBrandId) { %>
+                <input type="hidden" name="brand" value="<%= currentBrandId %>">
+            <% } %>
+            <label for="sort">Sắp xếp:</label>
+            <select name="sort" id="sort" onchange="this.form.submit()">
+                <option value="default" <%= currentSort === 'default' ? 'selected' : '' %>>Mới nhất</option>
+                <option value="price_asc" <%= currentSort === 'price_asc' ? 'selected' : '' %>>Giá: Thấp đến cao</option>
+                <option value="price_desc" <%= currentSort === 'price_desc' ? 'selected' : '' %>>Giá: Cao đến thấp</option>
+            </select>
+        </form>
     </div>
 </div>
 
@@ -21,13 +43,27 @@
             <%- include('../includes/product-card.ejs', { product: product }) %>
         <% }) %>
     <% } else { %>
-        <p class='grid-full-width'>Không có sản phẩm nào phù hợp.</p>
+        <p class="grid-full-width">Không có sản phẩm nào phù hợp.</p>
     <% } %>
 </section>
 
+<!-- Pagination -->
 <% if (pagination && pagination.lastPage > 1) { %>
     <div class="pagination">
-        </div>
+        <% if (pagination.hasPreviousPage) { %>
+            <a href="<%= pagination.baseUrl %>&page=<%= pagination.previousPage %>" aria-label="Trang trước">‹</a>
+        <% } %>
+        <% for(let i = 1; i <= pagination.lastPage; i++) { %>
+            <% if (i === pagination.currentPage) { %>
+                <span class="active"><%= i %></span>
+            <% } else { %>
+                <a href="<%= pagination.baseUrl %>&page=<%= i %>"><%= i %></a>
+            <% } %>
+        <% } %>
+        <% if (pagination.hasNextPage) { %>
+            <a href="<%= pagination.baseUrl %>&page=<%= pagination.nextPage %>" aria-label="Trang sau">›</a>
+        <% } %>
+    </div>
 <% } %>
 
 <%- include('../includes/footer.ejs') %>
